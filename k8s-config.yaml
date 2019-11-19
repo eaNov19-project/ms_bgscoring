@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bgscoring-ms
+  namespace: default
+data:
+  SEVER_PORT: "8080"
+  AUTHENTICATE_SERVICE: "auth-ms-service.default.svc.cluster.local:8080"
+  ANSWERS_SERVICE: "answer-ms-service.default.svc.cluster.local:8080"
+
+  MONGODB_HOST: "mongodb-sharded-1573848232.default.svc.cluster.local"
+  MONGODB_PORT: "27017"
+  MONGODB_PASS: "questions"
+  MONGODB_USERNAME: "questions"
+  MONGODB_DATABASE: "questions"
+  MONGODB_AUTH: "questions"
+
+#  MONGODB_ANSWERS_HOST: "mongodb-sharded-1573848232.default.svc.cluster.local"
+#  MONGODB_ANSWERS_PORT: "27017"
+#  MONGODB_ANSWERS_PASS: "answers"
+#  MONGODB_ANSWERS_USERNAME: "answers"
+#  MONGODB_ANSWERS_DATABASE: "answers"
+#  MONGODB_ANSWERS_AUTH: "answers"
