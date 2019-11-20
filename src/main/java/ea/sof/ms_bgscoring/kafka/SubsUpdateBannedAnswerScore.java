@@ -5,11 +5,11 @@ import ea.sof.ms_bgscoring.entity.QuestionEntity;
 import ea.sof.ms_bgscoring.repository.QuestionRepository;
 import ea.sof.ms_bgscoring.services.AnswersService;
 import ea.sof.shared.entities.AnswerEntity;
-import ea.sof.shared.models.Answer;
 import ea.sof.shared.queue_models.AnswerQueueModel;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 public class SubsUpdateBannedAnswerScore {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubsUpdateBannedAnswerScore.class);
 
     @Autowired
     QuestionRepository questionRepository;
@@ -30,7 +31,7 @@ public class SubsUpdateBannedAnswerScore {
 
     @KafkaListener(topics = "${topicUpdateBannedAnswer}", groupId = "${subsUpdateBannedAnswerScore}")
     public void listener(String message) {
-        log.info("\nSubsUpdateBannedAnswerScore :: New message from topic 'topicUpdateBannedAnswer': " + message);
+        LOGGER.info("\nSubsUpdateBannedAnswerScore :: New message from topic 'topicUpdateBannedAnswer': " + message);
 
         // 1. Getting data from request
         AnswerQueueModel answerQueueModel = null;
@@ -38,14 +39,14 @@ public class SubsUpdateBannedAnswerScore {
             Gson gson = new Gson();
             answerQueueModel = gson.fromJson(message, AnswerQueueModel.class);
         } catch (Exception ex) {
-            log.warn("SubsUpdateBannedAnswerScore :: Failed to convert Json: " + ex.getMessage());
+            LOGGER.warn("SubsUpdateBannedAnswerScore :: Failed to convert Json: " + ex.getMessage());
         }
 
         // 2. Retrieving question from DB
         String questionId = answerQueueModel.getQuestionId();
         QuestionEntity questionEntity = questionRepository.findById(questionId).orElse(null);
         if (questionEntity == null) {
-            log.warn("SubsUpdateBannedAnswerScore :: Failed to retrieve Question from DB.");
+            LOGGER.warn("SubsUpdateBannedAnswerScore :: Failed to retrieve Question from DB.");
             return;
         }
 
@@ -55,7 +56,7 @@ public class SubsUpdateBannedAnswerScore {
             getAnswersResp = answersService.getTop5AnswersByQuestionId(questionId);
             answerEntities = getAnswersResp.getBody();
         }catch (Exception ex){
-            log.warn("SubsUpdateBannedAnswerScore :: Failed to get top 5 answers from AnswerService: " + ex.getMessage());
+            LOGGER.warn("SubsUpdateBannedAnswerScore :: Failed to get top 5 answers from AnswerService: " + ex.getMessage());
         }
 
         // 3. adding the answer to the top list if there is space
@@ -69,13 +70,13 @@ public class SubsUpdateBannedAnswerScore {
                     questionEntity.setTopAnswers(answerEntities);
                     questionRepository.save(questionEntity);
 
-                    log.info("SubsUpdateBannedAnswerScore :: top 5 answers list updated");
+                    LOGGER.info("SubsUpdateBannedAnswerScore :: top 5 answers list updated");
                     break;
                 }
             }
 
         } catch (Exception ex) {
-            log.warn("SubsUpdateBannedAnswerScore :: Failed to save Entity: " + ex.getMessage());
+            LOGGER.warn("SubsUpdateBannedAnswerScore :: Failed to save Entity: " + ex.getMessage());
         }
     }
 
