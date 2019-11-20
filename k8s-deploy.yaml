@@ -16,116 +16,22 @@ spec:
     spec:
       containers:
         - name: bgscoring-ms
-          image: islamahmad/eaproj-bgscoring-ms:1.0.0
+          image: islamahmad/eaproj-bgscoringms:1.0.0
           env:
+            - name: SERVER_PORT
+              value: "8080"
+
             #MONGODB QUESTIONS
-            - name: MONGODB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: bgscoring-ms
-                  key: MONGODB_HOST
-            - name: MONGODB_USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  name: bgscoring-ms
-                  key: MONGODB_USERNAME
-            - name: MONGODB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: bgscoring-ms
-                  key: MONGODB_PORT
             - name: MONGODB_PASS
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: bgscoring-ms
                   key: MONGODB_PASS
-            - name: MONGODB_AUTH
-              valueFrom:
-                configMapKeyRef:
-                  name: bgscoring-ms
-                  key: MONGODB_AUTH
-            - name: MONGODB_DATABASE
-              valueFrom:
-                configMapKeyRef:
-                  name: bgscoring-ms
-                  key: MONGODB_DATABASE
 
-            #MONGODB ANSWERS
-#            - name: MONGODB_ANSWERS_HOST
-#              valueFrom:
-#                configMapKeyRef:
-#                  name: bgscoring-ms
-#                  key: MONGODB_ANSWERS_HOST
-#            - name: MONGODB_ANSWERS_USERNAME
-#              valueFrom:
-#                configMapKeyRef:
-#                  name: bgscoring-ms
-#                  key: MONGODB_ANSWERS_USERNAME
-#            - name: MONGODB_ANSWERS_PORT
-#              valueFrom:
-#                configMapKeyRef:
-#                  name: bgscoring-ms
-#                  key: MONGODB_ANSWERS_PORT
-#            - name: MONGODB_ANSWERS_PASS
-#              valueFrom:
-#                configMapKeyRef:
-#                  name: bgscoring-ms
-#                  key: MONGODB_ANSWERS_PASS
-#            - name: MONGODB_ANSWERS_AUTH
-#              valueFrom:
-#                configMapKeyRef:
-#                  name: bgscoring-ms
-#                  key: MONGODB_ANSWERS_AUTH
-#            - name: MONGODB_ANSWERS_DATABASE
-#              valueFrom:
-#                configMapKeyRef:
-#                  name: bgscoring-ms
-#                  key: MONGODB_ANSWERS_DATABASE
-
-            #KAFKA
-            - name: KAFKA_BOOTSTRAP_SERVERS
-              valueFrom:
-                configMapKeyRef:
-                  name: services-global
-                  key: KAFKA_BOOTSTRAP_SERVERS
-
-            - name: TOPIC_NEW_ANSWER
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-global
-                  key: TOPIC_NEW_ANSWER
-            - name: SUBS_NEW_ANSWER_SCORING
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-global
-                  key: SUBS_NEW_ANSWER_SCORING
-            - name: TOPIC_ANSWER_VOTED
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-global
-                  key: TOPIC_ANSWER_VOTED
-            - name: SUBS_ANSWER_VOTED
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-global
-                  key: SUBS_ANSWER_VOTED
-            - name: TOPIC_UPDATE_BANNED_ANSWER
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-global
-                  key: TOPIC_UPDATE_BANNED_ANSWER
-            - name: SUBS_UPDATE_BANNED_ANSWER_SCORE
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-global
-                  key: SUBS_UPDATE_BANNED_ANSWER_SCORE
-            - name: TOPIC_UPDATE_ANSWER_COMMENT_IN_QUESTION
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-global
-                  key: TOPIC_UPDATE_ANSWER_COMMENT_IN_QUESTION
-            - name: SUBS_UPDATE_ANSWER_COMMENT_IN_QUESTION_SCORE
-              valueFrom:
-                configMapKeyRef:
-                  name: kafka-global
-                  key: SUBS_UPDATE_ANSWER_COMMENT_IN_QUESTION_SCORE
+          envFrom:
+            - configMapRef:
+                name: bgscoring-ms
+            - configMapRef:
+                name: services-global
+            - configMapRef:
+                name: kafka-global
