@@ -69,6 +69,7 @@ public class SubsAnswerVoted {
                         questionEntity.getTopAnswers().remove(questionEntity.getTopAnswers().get(i));
                         questionEntity.addAnswer(answerEntity);
                         log.info("SubsAnswerVoted :: Answer was replaced in the top 5 answers list of questions");
+                        break;
                     }
                 }
             }
