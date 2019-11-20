@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: bgscoring-ms
-          image: islamahmad/eaproj-bgscoringms:1.0.0
+          image: islamahmad/eaproj-bgscoringms:1.0.1
           env:
             - name: SERVER_PORT
               value: "8080"

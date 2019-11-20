@@ -1,4 +1,4 @@
-img=islamahmad/eaproj-bgscoringms:1.0.0
+img=islamahmad/eaproj-bgscoringms:1.0.1
 
 # ===== Maven =====
 maven-rebuild:
