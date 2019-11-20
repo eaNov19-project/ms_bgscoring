@@ -1,4 +1,4 @@
-package ea.sof.ms_bgscoring;
+package ea.sof.ms_bgscoring.kafka;
 
 import com.google.gson.Gson;
 import ea.sof.ms_bgscoring.entity.QuestionEntity;
