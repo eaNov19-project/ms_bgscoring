@@ -30,7 +30,7 @@ public class SubsUpdateBannedAnswerScore {
 
     @KafkaListener(topics = "${topicUpdateBannedAnswer}", groupId = "${subsUpdateBannedAnswerScore}")
     public void listener(String message) {
-        LOGGER.info("\nSubsUpdateBannedAnswerScore :: New message from topic 'topicUpdateBannedAnswer': " + message);
+        LOGGER.info("SubsUpdateBannedAnswerScore :: New message from topic 'topicUpdateBannedAnswer': " + message);
 
         // 1. Getting data from request
         AnswerQueueModel answerQueueModel = null;
